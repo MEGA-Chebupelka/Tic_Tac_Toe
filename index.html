@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="scripts.js"></script>
+</head>
+<body>
+    <!----Main window-->
+    <div class="container">
+        <div class="board">
+        </div>
+        <button type="button" class="startNewGame"></button>
+    </div>
+
+     <!----Modal window-->
+    <div class="modal">
+        <div class="modal-content">
+            <span class="colse" id="close">&times</span>
+            <h2>ADD NEW PLAYERS</h2>
+            <form id="addNewPlayers">
+
+                <input type="text" id="playerOne" placeholder="First Player" class="playerForm" required>
+                <input type="text" id="playerTwo" placeholder="Second Player" class="playerForm" required>
+                <button type="button" id="submit">START</button>
+            </form>
+        </div>
+    </div>
+    
+</body>
+</html>
