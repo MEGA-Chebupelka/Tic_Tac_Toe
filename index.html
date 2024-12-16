@@ -4,26 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script src="scripts.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <script src="scripts.js" defer></script>
 </head>
 <body>
     <!----Main window-->
-    <div class="container">
-        <div class="board">
-        </div>
-        <button type="button" class="startNewGame"></button>
+    <div class="header">
+        <div class="title"><h1 id="title">TtT</h1></div>
+        <button type="button" id="startNewGame"><p class="btn">New Game</p></button>
+    </div>
+
+    <!----Info panel-->
+    <div id="info-panel">WELCOME!</div>
+
+    <div class="board">
+        <div class="cell" id="zero"></div>
+        <div class="cell" id="one"></div>
+        <div class="cell" id="two"></div>
+        <div class="cell" id="three"></div>
+        <div class="cell" id="four"></div>
+        <div class="cell" id="five"></div>
+        <div class="cell" id="six"></div>
+        <div class="cell" id="seven"></div>
+        <div class="cell" id="eight"></div>
+    </div>
+    <div class="footer">
+        <p id="creator">Created by <a href="https://github.com/MEGA-Chebupelka">MEGA-Chebupelka</a></p>
     </div>
 
      <!----Modal window-->
-    <div class="modal">
+    <div id="modal">
         <div class="modal-content">
-            <span class="colse" id="close">&times</span>
+            <span class="close" id="close">&times</span>
             <h2>ADD NEW PLAYERS</h2>
             <form id="addNewPlayers">
-
                 <input type="text" id="playerOne" placeholder="First Player" class="playerForm" required>
                 <input type="text" id="playerTwo" placeholder="Second Player" class="playerForm" required>
-                <button type="button" id="submit">START</button>
+                <button type="submit" id="submit">START</button>
             </form>
         </div>
     </div>

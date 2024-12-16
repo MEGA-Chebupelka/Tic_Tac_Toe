@@ -25,20 +25,19 @@ const Player = (name, symbol) => {
 
 const GameController = (() => {
     let currentPlayer;
-    const players = [
-        {name:"BOb", symbol:"X"},
-        {name:"Vlad", symbol:"O"}
-    ];
+    const players = [];
     let gameOver = false;
 
     // ADD players
     const startGame = (player1Name, player2Name) => {
+        players.length = 0;
+        Gameboard.resetBoard();
+        renderBoard();
+        gameOver = false;
         players.push(Player(player1Name, "X"));
         players.push(Player(player2Name, "O"));
         currentPlayer = players[0];
-        gameOver = false;
-        Gameboard.resetBoard();
-        console.log(`Игра началась! Первый ход за ${currentPlayer.name}`);
+        infoPanel.textContent = `The game has started! The first move for ${currentPlayer.name}`;
         console.log(Gameboard.getBoard());
     };
 
@@ -46,32 +45,42 @@ const GameController = (() => {
     const playTurn = (index) => {
         if (gameOver) {
             console.log("Игра уже завершена!");
-            return;
+            infoPanel.textContent = `The game is already over!`;
+            return false; // Возврат false, так как игра завершена
         }
-
+    
         if (Gameboard.updateCell(index, currentPlayer.symbol)) {
             console.log(`${currentPlayer.name} сделал ход в клетку ${index}`);
+            infoPanel.textContent = `${currentPlayer.name} made a move to the cell ${index}`;
+            
             if (checkWin()) {
-                console.log(`Победитель: ${currentPlayer.name}!`);
+                console.log(`Winner: ${currentPlayer.name}!`);
+                infoPanel.textContent = `Winner: ${currentPlayer.name}!`;
                 gameOver = true;
-                return;
+                return true; // Успешный ход
             }
+            
             if (checkTie()) {
-                console.log("Ничья!");
+                console.log("Tie!");
+                infoPanel.textContent = `Tie!`;
                 gameOver = true;
-                return;
+                return true; // Успешный ход
             }
+    
             switchPlayer();
+            return true; // Успешный ход
         } else {
             console.log("Эта клетка уже занята! Выберите другую.");
+            infoPanel.textContent = `This cell is already occupied! Choose another one.`;
+            return false; // Ход неуспешен
         }
-        console.log(Gameboard.getBoard());
     };
 
     // switchPlayer
     const switchPlayer = () => {
         currentPlayer = currentPlayer === players[0] ? players[1] : players[0];
-        console.log(`Ход за ${currentPlayer.name}`);
+        console.log(`The next move is for  ${currentPlayer.name}`);
+        infoPanel.textContent = `The next move is for  ${currentPlayer.name}`;
     };
 
     // Win check
@@ -97,4 +106,72 @@ const GameController = (() => {
     return { startGame, playTurn };
 })();
 
-//API 
+//API ---------------------------------------------------------------------------------------
+
+
+//Modal Window and Form and infopanel
+
+const newGameBtn = document.getElementById('startNewGame');
+newGameBtn.addEventListener('click', openModal)
+
+const closeModalWindowBtn = document.getElementById('close');
+closeModalWindowBtn.addEventListener('click',closeModal)
+
+const modalWindow = document.getElementById('modal');
+
+const infoPanel = document.getElementById('info-panel');
+
+document.getElementById('addNewPlayers').addEventListener('submit', 
+    function(event){
+        event.preventDefault();
+        const firstPlayer = document.getElementById('playerOne').value;
+        const secondPlayer = document.getElementById('playerTwo').value;
+        GameController.startGame(firstPlayer,secondPlayer);
+        closeModal();
+        this.reset();
+    }
+)
+
+window.addEventListener('click', function(event) {
+    if (event.target === modalWindow) {
+        closeModal();
+    }})
+
+function openModal(){
+    modalWindow.style.display = 'block';
+}
+
+function closeModal(){
+    modalWindow.style.display = 'none';
+}
+
+// Board
+
+const cells = document.querySelectorAll('.cell'); 
+
+function renderCell(cell, value) {
+    cell.innerHTML = ""; 
+    if (value === "X" || value === "O") {
+        const img = document.createElement("img");
+        img.src = value === "X" ? "img/cross.svg" : "img/circle.svg"; 
+        img.alt = value; 
+        cell.appendChild(img);
+    }
+}
+
+function renderBoard() {
+    const board = Gameboard.getBoard(); 
+    cells.forEach((cell, index) => {
+        renderCell(cell, board[index]);
+    });
+}
+
+cells.forEach((cell, index) => {
+    cell.addEventListener('click', () => {
+        if (GameController.playTurn(index)) {
+            renderBoard(); 
+        }
+    });
+});
+
+renderBoard();
